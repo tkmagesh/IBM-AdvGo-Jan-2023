@@ -47,3 +47,17 @@ About You
 Books:
     Agile Principles Patterns & Practices (Robert.C.Martin)
     
+Channels
+    Data types to enable communication between Goroutines
+    Declaration
+        var ch chan int
+    Instantiation
+        ch = make(chan int)
+    Operations ( using <- operator )
+        Send Operation
+            ch <- 100
+        Receive Operation
+            data := <- ch
+
+    Important:
+        
