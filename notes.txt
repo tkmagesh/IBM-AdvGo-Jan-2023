@@ -1,0 +1,47 @@
+Magesh Kuppan
+
+Schedule:
+    Commence    : 9:30 AM
+    Tea Break   : 11:00 AM (20 mins)
+    Lunch Break : 1:00 PM (1 hour)
+    Tea Break   : 3:30 PM (20 mins)
+    Wind up     : 5:30 PM
+
+Methodology:
+    No powerpoints
+    Lots of assignments
+
+Software Requirements
+    Go Tools (https://go.dev/dl)
+        go version
+    Visual Studio Code
+    Go Extension for VSCode (https://marketplace.visualstudio.com/items?itemName=golang.Go)
+    Docker Desktop
+
+Repo:
+    https://github.com/tkmagesh/ibm-advgo-jan-2023
+
+Prerequisites:
+    Go Basics
+        Datatypes, constructs
+        Higher Order Functions
+        Pointers
+        Structs, Composition
+        Interfaces
+        Concurrency
+            Goroutines
+            WaitGroups
+            Channels
+
+About You
+    Name
+    Primary Skillset
+    Experience in Go
+    Attended MY "Go Intro" class? (1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1)
+    Go Basics Topics that you would like to revise
+        Pointers (1 + 1 + 1)
+        Interfaces (1 + 1 + 1 + 1 + 1)
+        Higher Order Functions (1 + 1 + 1 + 1 + 1 + 1)
+        Concurrency (1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1)
+
+
