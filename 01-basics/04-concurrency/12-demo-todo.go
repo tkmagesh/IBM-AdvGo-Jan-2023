@@ -5,21 +5,27 @@ import (
 )
 
 func main() {
-	var ch chan int
-	ch = make(chan int)
-	go divide(100, 0, ch)
-	result := <-ch // blocked
-	fmt.Println("Result :", result)
+
+	resultCh, errorCh := divide(100, 0)
+	select {
+	case result := <-resultCh:
+		fmt.Println("Result :", result)
+	case e := <-errorCh:
+		fmt.Println("something went wrong..", e)
+	}
 }
 
-func divide(x, y int, ch chan int) {
-	defer func() {
-		if e := recover(); e != nil {
-			ch <- 0
-		}
+func divide(x, y int) (resultCh chan int, errorCh chan error) {
+	resultCh = make(chan int)
+	errorCh = make(chan error)
+	go func() {
+		defer func() {
+			if e := recover(); e != nil {
+				errorCh <- e.(error)
+			}
+		}()
+		result := x / y
+		resultCh <- result
 	}()
-	result := x / y
-	ch <- result
-	// time.Sleep(3 * time.Second)
-	fmt.Println("Add operation completed")
+	return
 }
