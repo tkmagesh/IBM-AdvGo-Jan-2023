@@ -44,4 +44,6 @@ About You
         Higher Order Functions (1 + 1 + 1 + 1 + 1 + 1)
         Concurrency (1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1)
 
-
+Books:
+    Agile Principles Patterns & Practices (Robert.C.Martin)
+    
