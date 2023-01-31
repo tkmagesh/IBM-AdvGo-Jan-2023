@@ -62,3 +62,20 @@ Channels
     Important:
         A RECEIVE operation is ALWAYS a blocking operation
         A SEND operation is blocked UNTIL a receive operation is initiated
+
+
+GRPC
+    Installation
+        1. Protocol Buffers Compiler (protoc tool)
+            Windows:
+                Download the file, extract and keep in a folder (PATH) accessble through the command line
+                https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protoc-21.12-win64.zip
+            Mac:
+                brew install protobuf
+
+            Verification:
+                protoc --version
+
+        2. Go plugins
+            go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28
+            go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
