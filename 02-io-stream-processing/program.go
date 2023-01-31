@@ -11,7 +11,14 @@ import (
 func main() {
 	sum1 := test("data1.dat")
 	sum2 := test("data2.dat")
-	fmt.Println(sum1 + sum2)
+	total := sum1 + sum2
+	file, err := os.Create("test.txt")
+	defer file.Close()
+	if err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Fprintf(file, "Total = %d\n", total)
+
 }
 
 /* How to read from file and convert text to int */
