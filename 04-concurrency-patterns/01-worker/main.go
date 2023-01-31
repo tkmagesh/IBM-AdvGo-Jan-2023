@@ -13,7 +13,7 @@ type MyWork struct {
 
 func (myWork MyWork) Task() {
 	fmt.Printf("task [%d] started...\n", myWork.Id)
-	time.Sleep(time.Duration(rand.Intn(2000)) * time.Millisecond)
+	time.Sleep(time.Duration(rand.Intn(10000)) * time.Millisecond)
 	fmt.Printf("task [%d] completed...\n", myWork.Id)
 }
 
