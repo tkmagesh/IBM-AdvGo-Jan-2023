@@ -65,6 +65,14 @@ Channels
 
 
 GRPC
+    Communication Patterns
+        1. Request Response
+        2. Server Streaming (1 request & a stream of responses)
+        3. Client Streaming (a stream of requests & 1 response)
+        4. Bidirectional Streaming (a stream of requests & a stream of responses)
+
+
+
     Installation
         1. Protocol Buffers Compiler (protoc tool)
             Windows:
@@ -79,3 +87,17 @@ GRPC
         2. Go plugins
             go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28
             go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
+
+    Steps:
+        1. Create the contracts
+            Service Contract
+            Operation Contracts
+            Message / Data Contracts
+        2. Generate the proxy and stub using the the contracts
+            From the app folder (go.mod folder)
+                protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative proto/service.proto
+        3. Implement the service
+        4. Host the service
+        5. Use the proxy to communicate to the service
+
+    
