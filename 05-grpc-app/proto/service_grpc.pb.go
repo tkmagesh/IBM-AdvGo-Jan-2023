@@ -24,6 +24,8 @@ const _ = grpc.SupportPackageIsVersion7
 type AppServiceClient interface {
 	// request & response
 	Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error)
+	// server streaming
+	FindPrimes(ctx context.Context, in *PrimeRequest, opts ...grpc.CallOption) (AppService_FindPrimesClient, error)
 }
 
 type appServiceClient struct {
@@ -43,12 +45,46 @@ func (c *appServiceClient) Add(ctx context.Context, in *AddRequest, opts ...grpc
 	return out, nil
 }
 
+func (c *appServiceClient) FindPrimes(ctx context.Context, in *PrimeRequest, opts ...grpc.CallOption) (AppService_FindPrimesClient, error) {
+	stream, err := c.cc.NewStream(ctx, &AppService_ServiceDesc.Streams[0], "/proto.AppService/FindPrimes", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &appServiceFindPrimesClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type AppService_FindPrimesClient interface {
+	Recv() (*PrimeResponse, error)
+	grpc.ClientStream
+}
+
+type appServiceFindPrimesClient struct {
+	grpc.ClientStream
+}
+
+func (x *appServiceFindPrimesClient) Recv() (*PrimeResponse, error) {
+	m := new(PrimeResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // AppServiceServer is the server API for AppService service.
 // All implementations must embed UnimplementedAppServiceServer
 // for forward compatibility
 type AppServiceServer interface {
 	// request & response
 	Add(context.Context, *AddRequest) (*AddResponse, error)
+	// server streaming
+	FindPrimes(*PrimeRequest, AppService_FindPrimesServer) error
 	mustEmbedUnimplementedAppServiceServer()
 }
 
@@ -58,6 +94,9 @@ type UnimplementedAppServiceServer struct {
 
 func (UnimplementedAppServiceServer) Add(context.Context, *AddRequest) (*AddResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Add not implemented")
+}
+func (UnimplementedAppServiceServer) FindPrimes(*PrimeRequest, AppService_FindPrimesServer) error {
+	return status.Errorf(codes.Unimplemented, "method FindPrimes not implemented")
 }
 func (UnimplementedAppServiceServer) mustEmbedUnimplementedAppServiceServer() {}
 
@@ -90,6 +129,27 @@ func _AppService_Add_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AppService_FindPrimes_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(PrimeRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(AppServiceServer).FindPrimes(m, &appServiceFindPrimesServer{stream})
+}
+
+type AppService_FindPrimesServer interface {
+	Send(*PrimeResponse) error
+	grpc.ServerStream
+}
+
+type appServiceFindPrimesServer struct {
+	grpc.ServerStream
+}
+
+func (x *appServiceFindPrimesServer) Send(m *PrimeResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 // AppService_ServiceDesc is the grpc.ServiceDesc for AppService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -102,6 +162,12 @@ var AppService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _AppService_Add_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "FindPrimes",
+			Handler:       _AppService_FindPrimes_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "proto/service.proto",
 }

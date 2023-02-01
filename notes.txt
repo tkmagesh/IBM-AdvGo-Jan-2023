@@ -72,7 +72,6 @@ GRPC
         4. Bidirectional Streaming (a stream of requests & a stream of responses)
 
 
-
     Installation
         1. Protocol Buffers Compiler (protoc tool)
             Windows:

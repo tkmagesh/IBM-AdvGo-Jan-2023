@@ -3,11 +3,15 @@ package main
 import (
 	"context"
 	"fmt"
+	"io"
 	"log"
+	"time"
 
 	"github.com/tkmagesh/IBM-AdvGo-Jan-2023/05-grpc-app/proto"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/status"
 )
 
 func main() {
@@ -18,14 +22,57 @@ func main() {
 	}
 	client := proto.NewAppServiceClient(clientConn)
 	ctx := context.Background()
+
+	// doRequestResponse(ctx, client)
+	doServerStreaming(ctx, client)
+}
+
+func doRequestResponse(ctx context.Context, client proto.AppServiceClient) {
 	addRequest := &proto.AddRequest{
 		X: 100,
 		Y: 200,
 	}
-	addResponse, err := client.Add(ctx, addRequest)
+	timeoutCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	addResponse, err := client.Add(timeoutCtx, addRequest)
 	if err != nil {
+		if code := status.Code(err); code == codes.DeadlineExceeded {
+			fmt.Println("Timeout occured")
+			return
+		}
 		fmt.Println(err)
 		return
 	}
 	fmt.Println("Add Response :", addResponse.GetResult())
+}
+
+func doServerStreaming(ctx context.Context, client proto.AppServiceClient) {
+	var start int32 = 3
+	var end int32 = 100
+	req := &proto.PrimeRequest{
+		Start: start,
+		End:   end,
+	}
+	clientStream, err := client.FindPrimes(ctx, req)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	for {
+		res, err := clientStream.Recv()
+		if err == io.EOF {
+			fmt.Println("All prime numbers received")
+			break
+		}
+		if err != nil {
+			grpcCode := status.Code(err)
+			if grpcCode == codes.Unavailable {
+				log.Fatalln("Server not available")
+				break
+			}
+			log.Println(err)
+			continue
+		}
+		fmt.Printf("Prime No : %d\n", res.GetPrimeNo())
+	}
 }
