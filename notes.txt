@@ -102,3 +102,10 @@ GRPC
 Http Services
     1. net/http
     2. 3rd party routing libraries
+    3. Web Frameworks (gin)
+
+Database
+    1. GORM
+    2. Code generators (sqlc)
+
+    

@@ -6,6 +6,8 @@ import (
 	models "todo-app/models"
 	routes "todo-app/routes"
 
+	_ "net/http/pprof"
+
 	"github.com/jinzhu/gorm"
 )
 
