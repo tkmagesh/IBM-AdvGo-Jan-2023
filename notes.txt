@@ -108,4 +108,29 @@ Database
     1. GORM
     2. Code generators (sqlc)
 
+Testing
+    built in test runner
+        go test
+
+    apis in the std libraries
+        "testing" package
+    
+    Tests are functions
+        func Testxxx(t *testing.T){
+            //arrange
+
+            //act
+
+            //assert
+        }
+
+    Useful tools
+        gotest (https://github.com/rakyll/gotest)
+
+    To generate mocks
+        to install the mockery
+            go install github.com/vektra/mockery/v2@latest
+
+        using mockery
+            mockery --all --keeptree
     
