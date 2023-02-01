@@ -31,6 +31,7 @@ func (wa *WebApp) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	methodHandlers, exists := wa.handlers[r.Method]
 	if !exists {
 		w.WriteHeader(http.StatusMethodNotAllowed)
+		fmt.Fprintln(w, "Method not allowed")
 		return
 	}
 	if handler, exists := methodHandlers[r.URL.Path]; exists {
@@ -38,7 +39,7 @@ func (wa *WebApp) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.WriteHeader(http.StatusNotFound)
-	fmt.Fprint(w, "Requested resource not found")
+	fmt.Fprintln(w, "Requested resource not found")
 }
 
 func NewWebApp() *WebApp {
